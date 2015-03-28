@@ -55,7 +55,7 @@ public class MainActivity extends FragmentActivity implements
                 // make respected tab selected
                 actionBar.setSelectedNavigationItem(position);
 
-                System.out.println(" ***** My Position **** " + position);
+
             }
 
             @Override
@@ -92,7 +92,7 @@ public class MainActivity extends FragmentActivity implements
                     Uri.parse("https://play.google.com/store/apps/details?id=com.kawakuticode.learnsemba"));
             startActivity(i);
 
-    }
+        }
 
     }
 }
