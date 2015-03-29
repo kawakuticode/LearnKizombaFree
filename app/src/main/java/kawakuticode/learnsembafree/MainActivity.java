@@ -10,6 +10,9 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 @SuppressLint("NewApi")
 public class MainActivity extends FragmentActivity implements
         ActionBar.TabListener, View.OnClickListener {
@@ -26,7 +29,9 @@ public class MainActivity extends FragmentActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //    requestWindowFeature(Window.FEATURE_ACTION_BAR);
-
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
         // Initilization
         viewPager = (ViewPager) findViewById(R.id.pager);
         final ActionBar actionBar = getActionBar();
