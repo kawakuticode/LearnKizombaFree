@@ -1,4 +1,4 @@
-package kawakuticode.learnsembafree;
+package kawakuticode.kawakutilearnsembafree;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
@@ -18,7 +18,6 @@ public class MainActivity extends FragmentActivity implements
         ActionBar.TabListener, View.OnClickListener {
     private ViewPager viewPager;
     private TabsPageAdapter mAdapter;
-    //private ActionBar actionBar;
 
 
     // Tab titles
@@ -29,9 +28,11 @@ public class MainActivity extends FragmentActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //    requestWindowFeature(Window.FEATURE_ACTION_BAR);
+
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+        mAdView.bringToFront();
         // Initilization
         viewPager = (ViewPager) findViewById(R.id.pager);
         final ActionBar actionBar = getActionBar();
@@ -40,6 +41,10 @@ public class MainActivity extends FragmentActivity implements
         mAdapter = new TabsPageAdapter(getSupportFragmentManager());
 
         viewPager.setAdapter(mAdapter);
+
+
+
+
        /* actionBar.setHomeButtonEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);*/
 

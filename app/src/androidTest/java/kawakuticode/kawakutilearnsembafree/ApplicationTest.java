@@ -1,4 +1,4 @@
-package kawakuticode.learnsembafree;
+package kawakuticode.kawakutilearnsembafree;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

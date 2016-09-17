@@ -6,7 +6,7 @@ android {
 
 
     defaultConfig {
-        applicationId "kawakuticode.learnsembafree"
+        applicationId "kawakuticode.kawakutilearnsembafree"
         minSdkVersion 14
         targetSdkVersion 21
         versionCode 1

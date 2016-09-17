@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="kawakuticode.learnsembafree">
+    package="kawakuticode.kawakutilearnsembafree">
 
     <!-- Screens Support -->
     <supports-screens
@@ -26,7 +26,7 @@
         android:theme="@android:style/Theme.Holo.Light">
 
         <activity
-            android:name=".MainActivity"
+            android:name="kawakuticode.kawakutilearnsembafree.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,7 +34,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".VideoViewActivity"
+            android:name="kawakuticode.kawakutilearnsembafree.VideoViewActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="landscape" />
         <!--Include the AdActivity configChanges and theme. -->
