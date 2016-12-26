@@ -15,6 +15,10 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ListFragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,72 +26,74 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.content.Context.CONNECTIVITY_SERVICE;
 
 @SuppressLint("NewApi")
 public class BeginnersLevel extends ListFragment {
 
+    ListView classListView = null;
+    private List<Lesson> beginner_lessons;
 
-    private String beginners[];
-    Integer[] imageId;
+    private String[] titles;
+    Integer[] thumbnails;
     Integer[] imageButton;
 
+    Utilities utilities;
+
     private ProgressDialog progressDialog;
-    private String[] contents = new String[2];
+    private String[] contents = new String[3];
 
-    public BeginnersLevel() {
 
-        beginners = new String[]{"welcome", "a pega", "a base",
-                "ginga homem", "ginga mulher",};
+    private void prepareLesson() {
 
-        imageId = new Integer[]{R.drawable.welcome, R.drawable.pega,
-                R.drawable.base, R.drawable.xhomem, R.drawable.gmulher,
+        titles = new String[]{"welcome", "a pega", "a base",
+                "ginga homem", "ginga mulher"};
 
-        };
-        imageButton = new Integer[]{R.drawable.ic_play_lesson, R.drawable.ic_play_lesson,
-                R.drawable.ic_play_lesson, R.drawable.ic_play_lesson, R.drawable.ic_play_lesson};
-
+        thumbnails = new Integer[]{R.drawable.welcome, R.drawable.pega,
+                R.drawable.base, R.drawable.xhomem, R.drawable.gmulher};
 
     }
+
+    public BeginnersLevel() {
+        prepareLesson();
+
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ListAdapter listAdapter = new CustomList(getActivity(), beginners,
-                imageId, imageButton);
-
-
+        ListAdapter listAdapter = new CustomList(getActivity(), titles,
+                thumbnails, imageButton);
         setListAdapter(listAdapter);
-
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.list_fragment, container, false);
 
-
-        return inflater.inflate(R.layout.list_fragment, container, false);
-
-
+        return rootView;
     }
 
 
     @Override
     public void onListItemClick(ListView list, View v, int position, long id) {
 
-
         String item = (String) list.getAdapter().getItem(position);
-
 
         String url = "";
 
         String folder = "/semba/";
-        File toPlay;
+        File temp_file;
+        int temp_file_size;
+        utilities = new Utilities(getActivity());
 
-        if (isExternalStorageAvailable() == true) {
+        if (utilities.isExternalStorageAvailable() == true) {
 
             String imagePath = Environment.getExternalStorageDirectory()
                     .toString() + folder;
@@ -95,36 +101,35 @@ public class BeginnersLevel extends ListFragment {
             switch (item) {
 
                 case "welcome":
+                    temp_file = new File(imagePath, item);
+                    temp_file_size = new Integer(11128489);
 
-                    toPlay = new File(imagePath, item);
+                    if (temp_file.exists() && temp_file.length() == temp_file_size) {
 
-                    int filesize = 21382365;
+                        utilities.launchVideoPlayer(temp_file);
 
-                    if (toPlay.exists() && toPlay.length() == filesize) {
+                    } else if ((temp_file.exists() || (temp_file.length() < temp_file_size))
+                            && utilities.isOnline() == false) {
 
-                        launchVideoPlayer(toPlay);
-
-                    } else if ((toPlay.exists() || (toPlay.length() < filesize))
-                            && isOnline() == false) {
-
-                        showAlertDialog(getActivity(), "No Internet Connection",
+                        utilities.showAlertDialog(getActivity(), "No Internet Connection",
                                 "Turn On your Connection to Download the file.",
                                 false);
                         break;
 
-                    } else if ((toPlay.exists() || toPlay.length() < filesize)
-                            && isOnline() == true) {
+                    } else if ((temp_file.exists() || temp_file.length() < temp_file_size)
+                            && utilities.isOnline() == true) {
 
-                        if (checkSpaceOnCard(filesize) == true) {
-                            showAlertDialog(
+                        if (utilities.checkSpaceOnCard(temp_file_size) == true) {
+                            utilities.showAlertDialog(
                                     getActivity(),
                                     "No Enough Space ",
                                     "Delete some file on your sdCard and try again.",
                                     false);
                         } else {
-                            url = "https://dl.dropboxusercontent.com/s/61b28019t0yhfc1/welcome.mp4?dl=1&token_hash=AAHY3jSqBALx9ESRGYJdqKOtWNicej7_AeVxNSMNoNj2tw";
+                            url = "https://drive.google.com/uc?export=download&id=0B2w_WoypwqQGUlJIdjdwREI0QzQ";
                             contents[0] = url;
-                            contents[1] = toPlay.getName();
+                            contents[1] = temp_file.getName();
+                            contents[2] = String.valueOf(temp_file_size);
 
                             new DownloadAsyncFile(getActivity(), progressDialog)
                                     .execute(contents);
@@ -135,35 +140,35 @@ public class BeginnersLevel extends ListFragment {
 
                 case "a pega":
 
-                    toPlay = new File(imagePath, item);
-                    int filesizep = 26072785;
+                    temp_file = new File(imagePath, item);
+                    temp_file_size = new Integer(16840132);
 
-                    if (toPlay.exists() && toPlay.length() == filesizep) {
+                    if (temp_file.exists() && temp_file.length() == temp_file_size) {
 
-                        launchVideoPlayer(toPlay);
+                        utilities.launchVideoPlayer(temp_file);
 
-                    } else if ((toPlay.exists() || toPlay.length() < filesizep)
-                            && isOnline() == false) {
+                    } else if ((temp_file.exists() || temp_file.length() < temp_file_size)
+                            && utilities.isOnline() == false) {
 
-                        showAlertDialog(getActivity(), "No Internet Connection",
+                        utilities.showAlertDialog(getActivity(), "No Internet Connection",
                                 "Turn On your Connection to Download the file.",
                                 false);
                         break;
 
-                    } else if ((toPlay.exists() || toPlay.length() < filesizep)
-                            && isOnline() == true) {
-                        if (checkSpaceOnCard(filesizep) == true) {
-                            showAlertDialog(
+                    } else if ((temp_file.exists() || temp_file.length() < temp_file_size)
+                            && utilities.isOnline() == true) {
+                        if (utilities.checkSpaceOnCard(temp_file_size) == true) {
+                            utilities.showAlertDialog(
                                     getActivity(),
                                     "No Enough Space ",
                                     "Delete some file on your sdCard and try again.",
                                     false);
                             break;
                         } else {
-                            url = "https://dl.dropboxusercontent.com/s/dkighbg2pa30veq/apega.mp4?dl=1&token_hash=AAGY3omz_EJ7o-pjdSuUhoHuOWiKXnBsyB1HfbOS_ay6XA";
-
+                            url = "https://drive.google.com/uc?export=download&id=0B2w_WoypwqQGOElpVjc2eDV2cVE";
                             contents[0] = url;
-                            contents[1] = toPlay.getName();
+                            contents[1] = temp_file.getName();
+                            contents[2] = String.valueOf(temp_file_size);
 
                             new DownloadAsyncFile(getActivity(), progressDialog)
                                     .execute(contents);
@@ -173,26 +178,26 @@ public class BeginnersLevel extends ListFragment {
 
                 case "a base":
 
-                    toPlay = new File(imagePath, item);
-                    int filesizeb = 34119704;
+                    temp_file = new File(imagePath, item);
+                    temp_file_size = new Integer(21176620);
 
-                    if (toPlay.exists() && toPlay.length() == filesizeb) {
+                    if (temp_file.exists() && temp_file.length() == temp_file_size) {
 
-                        launchVideoPlayer(toPlay);
+                        utilities.launchVideoPlayer(temp_file);
 
-                    } else if ((toPlay.exists() || toPlay.length() < filesizeb)
-                            && isOnline() == false) {
+                    } else if ((temp_file.exists() || temp_file.length() < temp_file_size)
+                            && utilities.isOnline() == false) {
 
-                        showAlertDialog(getActivity(), "No Internet Connection",
+                        utilities.showAlertDialog(getActivity(), "No Internet Connection",
                                 "Turn On your Connection to Download the file.",
                                 false);
                         break;
 
-                    } else if ((toPlay.exists() || toPlay.length() < filesizeb)
-                            && isOnline() == true) {
+                    } else if ((temp_file.exists() || temp_file.length() < temp_file_size)
+                            && utilities.isOnline() == true) {
 
-                        if (checkSpaceOnCard(filesizeb) == true) {
-                            showAlertDialog(
+                        if (utilities.checkSpaceOnCard(temp_file_size) == true) {
+                            utilities.showAlertDialog(
                                     getActivity(),
                                     "No Enough Space ",
                                     "Delete some file on your sdCard and try again.",
@@ -200,9 +205,10 @@ public class BeginnersLevel extends ListFragment {
                             break;
                         } else {
 
-                            url = "https://dl.dropboxusercontent.com/s/zo1uly0zoz10wpb/base.mp4?dl=1&token_hash=AAFdlttc_DWe9legfev7rwe3v179xqlZHa7FiVu8iW9-GA";
+                            url = "https://drive.google.com/uc?export=download&id=0B2w_WoypwqQGSVY3aWRQS1BvczQ";
                             contents[0] = url;
-                            contents[1] = toPlay.getName();
+                            contents[1] = temp_file.getName();
+                            contents[2] = String.valueOf(temp_file_size);
 
                             new DownloadAsyncFile(getActivity(), progressDialog)
                                     .execute(contents);
@@ -212,27 +218,27 @@ public class BeginnersLevel extends ListFragment {
 
                 case "ginga homem":
 
-                    toPlay = new File(imagePath, item);
+                    temp_file = new File(imagePath, item);
 
-                    int filesizegm = 48068344;
+                    temp_file_size = new Integer(9091789);
 
-                    if (toPlay.exists() && toPlay.length() == filesizegm) {
+                    if (temp_file.exists() && temp_file.length() == temp_file_size) {
 
-                        launchVideoPlayer(toPlay);
+                        utilities.launchVideoPlayer(temp_file);
 
-                    } else if ((toPlay.exists() || toPlay.length() < filesizegm)
-                            && isOnline() == false) {
+                    } else if ((temp_file.exists() || temp_file.length() < temp_file_size)
+                            && utilities.isOnline() == false) {
 
-                        showAlertDialog(getActivity(), "No Internet Connection",
+                        utilities.showAlertDialog(getActivity(), "No Internet Connection",
                                 "Turn On your Connection to Download the file.",
                                 false);
                         break;
 
-                    } else if ((toPlay.exists() || toPlay.length() < filesizegm)
-                            && isOnline() == true) {
+                    } else if ((temp_file.exists() || temp_file.length() < temp_file_size)
+                            && utilities.isOnline() == true) {
 
-                        if (checkSpaceOnCard(filesizegm) == true) {
-                            showAlertDialog(
+                        if (utilities.checkSpaceOnCard(temp_file_size) == true) {
+                            utilities.showAlertDialog(
                                     getActivity(),
                                     "No Enough Space ",
                                     "Delete some file on your sdCard and try again.",
@@ -240,9 +246,9 @@ public class BeginnersLevel extends ListFragment {
                             break;
                         } else {
 
-                            url = "https://dl.dropboxusercontent.com/s/9qu65cqfx7vil5c/gingahomem.mp4?dl=1&token_hash=AAFxyGrfdC34vKvordZVBRl30lQMMDDSVH3ZBpbeoZp2Fg";
-                            contents[0] = url;
-                            contents[1] = toPlay.getName();
+                            url = "https://drive.google.com/uc?export=download&id=0B2w_WoypwqQGVFh2dzlkRUgwcWc";                            contents[0] = url;
+                            contents[1] = temp_file.getName();
+                            contents[2] = String.valueOf(temp_file_size);
 
                             new DownloadAsyncFile(getActivity(), progressDialog)
                                     .execute(contents);
@@ -252,28 +258,24 @@ public class BeginnersLevel extends ListFragment {
                     break;
 
                 case "ginga mulher":
+                    temp_file = new File(imagePath, item);
+                    temp_file_size = new Integer(25531633);
 
-                    toPlay = new File(imagePath, item);
+                    if (temp_file.exists() && temp_file.length() == temp_file_size) {
+                        utilities.launchVideoPlayer(temp_file);
+                    } else if ((temp_file.exists() || temp_file.length() < temp_file_size)
+                            && utilities.isOnline() == false) {
 
-                    int filesizegl = 41607264;
-
-                    if (toPlay.exists() && toPlay.length() == filesizegl) {
-
-                        launchVideoPlayer(toPlay);
-
-                    } else if ((toPlay.exists() || toPlay.length() < filesizegl)
-                            && isOnline() == false) {
-
-                        showAlertDialog(getActivity(), "No Internet Connection",
+                        utilities.showAlertDialog(getActivity(), "No Internet Connection",
                                 "Turn On Your Connection to Download the file.",
                                 false);
                         break;
 
-                    } else if ((toPlay.exists() || toPlay.length() < filesizegl)
-                            && isOnline() == true) {
+                    } else if ((temp_file.exists() || temp_file.length() < temp_file_size)
+                            && utilities.isOnline() == true) {
 
-                        if (checkSpaceOnCard(filesizegl) == true) {
-                            showAlertDialog(
+                        if (utilities.checkSpaceOnCard(temp_file_size) == true) {
+                            utilities.showAlertDialog(
                                     getActivity(),
                                     "No Enough Space ",
                                     "Delete some file on your sdCard and try again.",
@@ -281,10 +283,12 @@ public class BeginnersLevel extends ListFragment {
                             break;
                         } else {
 
-                            url = "https://dl.dropboxusercontent.com/s/uczu9ln0hc45r3a/gingamulher.mp4?dl=1&token_hash=AAF53vcHJfAKjS1APGRf6bOAxKv-57FP4ACDIyu5Z1VaCA";
+                            url = "https://drive.google.com/uc?export=download&id=0B2w_WoypwqQGMzNXdmt4MWRzWFk";
+
 
                             contents[0] = url;
-                            contents[1] = toPlay.getName();
+                            contents[1] = temp_file.getName();
+                            contents[2] = String.valueOf(temp_file_size);
 
                             new DownloadAsyncFile(getActivity(), progressDialog)
                                     .execute(contents);
@@ -298,73 +302,10 @@ public class BeginnersLevel extends ListFragment {
                     break;
             }
         } else {
-            showAlertDialog(getActivity(), "External Card Not Available",
+            utilities.showAlertDialog(getActivity(), "External Card Not Available",
                     "Insert Your SDCard to Read/Write Files", false);
         }
     }
 
-    public void launchVideoPlayer(File videoFile) {
-
-        Intent myIntent = new Intent(getActivity(), VideoViewActivity.class);
-        myIntent.putExtra("pathVideo", videoFile.getAbsolutePath());
-        startActivity(myIntent);
-
-    }
-
-    public boolean isOnline() {
-        ConnectivityManager cm = (ConnectivityManager) getActivity()
-                .getSystemService(CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Function to display simple Alert Dialog
-     *
-     * @param context - application context
-     * @param title   - alert dialog title
-     * @param message - alert message
-     * @param status  - success/failure (used to set icon)
-     */
-    @SuppressWarnings("deprecation")
-    public void showAlertDialog(Context context, String title, String message,
-                                Boolean status) {
-        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
-
-        // Setting Dialog Title
-        alertDialog.setTitle(title);
-
-        // Setting Dialog Message
-        alertDialog.setMessage(message);
-
-        // Setting alert dialog icon
-        alertDialog.setIcon((status) ? R.drawable.success : R.drawable.fail);
-
-        // Setting OK Button
-        alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
-
-        // Showing Alert Message
-        alertDialog.show();
-    }
-
-    public boolean checkSpaceOnCard(int sizeOfFile)
-
-    {
-        return Environment.getExternalStorageDirectory().getTotalSpace() < sizeOfFile ? true
-                : false;
-    }
-
-    public boolean isExternalStorageAvailable() {
-        String state = Environment.getExternalStorageState();
-
-        return Environment.MEDIA_MOUNTED.equals(state) ? true : false;
-    }
 
 }

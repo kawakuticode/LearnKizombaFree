@@ -40,7 +40,7 @@ public class DownloadAsyncFile extends AsyncTask<String, Integer, String> {
 	@Override
 	public void onPreExecute() {
 		mProgress = new ProgressDialog(mContext);
-		mProgress.setMessage("Downloading the video lesson \nPlease wait...");
+		mProgress.setMessage("Downloading the video Lesson \nPlease wait...");
 		mProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		mProgress.setIndeterminate(false);
 		mProgress.setMax(100);
@@ -95,7 +95,7 @@ public class DownloadAsyncFile extends AsyncTask<String, Integer, String> {
 						conection.connect();
 
 						// getting file length
-						int lenghtOfFile = conection.getContentLength();
+						int lenghtOfFile = Integer.parseInt(f_url[2]);
 						// input stream to read file - with 8k buffer
 						InputStream input = new BufferedInputStream(
 								url.openStream(), 8192);

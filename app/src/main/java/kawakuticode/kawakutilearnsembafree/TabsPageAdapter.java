@@ -1,5 +1,6 @@
 package kawakuticode.kawakutilearnsembafree;
 
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.ListFragment;
@@ -14,7 +15,7 @@ public class TabsPageAdapter  extends FragmentPagerAdapter {
     }
 
     @Override
-    public ListFragment getItem(int index) {
+    public Fragment getItem(int index) {
 
         switch (index) {
 

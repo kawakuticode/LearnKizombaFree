@@ -57,7 +57,7 @@ public class CustomList extends ArrayAdapter<String> {
         ImageView playIcon = (ImageView) rowView.findViewById(R.id.playbutton);
         txtTitle.setText(web[position]);
         imageView.setImageResource(imageId[position]);
-        playIcon.setImageResource(imageButton[position]);
+        //playIcon.setImageResource(imageButton[position]);
 
 
         return rowView;
