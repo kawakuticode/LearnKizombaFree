@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/star"/>
+                android:src="@drawable/ic_play_v"/>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

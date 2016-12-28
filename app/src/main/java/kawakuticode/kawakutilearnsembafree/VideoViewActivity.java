@@ -13,11 +13,8 @@ import android.widget.VideoView;
 
 public class VideoViewActivity extends Activity {
 
-	// Declare variables
-	ProgressDialog pDialog;
-	VideoView videoview;
 
-	// Insert your Video URL
+	VideoView videoview;
 	String VideoURL;
 
 
@@ -29,18 +26,7 @@ public class VideoViewActivity extends Activity {
 		setContentView(R.layout.videoview_general);
 		// Find your VideoView in your video_main.xml layout
 		videoview = (VideoView) findViewById(R.id.VideoView);
-		// Execute StreamVideo AsyncTask
 
-		// // Create a progressbar
-		// pDialog = new ProgressDialog(VideoViewActivity.this);
-		// // Set progressbar title
-		// pDialog.setTitle("Android Video Streaming Tutorial");
-		// // Set progressbar message
-		// pDialog.setMessage("Buffering...");
-		// pDialog.setIndeterminate(false);
-		// pDialog.setCancelable(false);
-		// // Show progressbar
-		// pDialog.show();
 
 		try {
 			// Start the MediaController
@@ -71,6 +57,4 @@ public class VideoViewActivity extends Activity {
 		});
 
 	}
-
-
 }

@@ -34,6 +34,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:src="@drawable/ic_play_lesson"/>/>
+        android:src="@drawable/ic_play_v"/>/>
 
 </RelativeLayout>

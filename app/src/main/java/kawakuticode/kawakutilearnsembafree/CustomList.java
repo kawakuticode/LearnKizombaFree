@@ -27,7 +27,6 @@ public class CustomList extends ArrayAdapter<String> {
 
 
         super(context, R.layout.row_lesson, web);
-
         this.context = context;
         this.web = web;
         this.imageId = imageId;
@@ -58,7 +57,6 @@ public class CustomList extends ArrayAdapter<String> {
         txtTitle.setText(web[position]);
         imageView.setImageResource(imageId[position]);
         //playIcon.setImageResource(imageButton[position]);
-
 
         return rowView;
     }

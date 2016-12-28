@@ -282,10 +282,7 @@ public class BeginnersLevel extends ListFragment {
                                     false);
                             break;
                         } else {
-
                             url = "https://drive.google.com/uc?export=download&id=0B2w_WoypwqQGMzNXdmt4MWRzWFk";
-
-
                             contents[0] = url;
                             contents[1] = temp_file.getName();
                             contents[2] = String.valueOf(temp_file_size);

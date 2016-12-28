@@ -21,11 +21,15 @@ import static android.content.Context.CONNECTIVITY_SERVICE;
 public class Utilities {
 
     private FragmentActivity frag_activity;
+    private Context mContext;
 
 
     public Utilities(FragmentActivity frag_activity) {
-
         this.frag_activity = frag_activity;
+    }
+
+    public Utilities(Context mContext) {
+        this.mContext = mContext;
     }
 
     public FragmentActivity getFrag_activity() {
@@ -37,11 +41,9 @@ public class Utilities {
     }
 
     public void launchVideoPlayer(File videoFile) {
-
         Intent myIntent = new Intent(this.getFrag_activity(), VideoViewActivity.class);
         myIntent.putExtra("pathVideo", videoFile.getAbsolutePath());
         this.getFrag_activity().startActivity(myIntent);
-
     }
 
 
@@ -105,5 +107,21 @@ public class Utilities {
                     "Insert Your SDCard to Read/Write Files", false);
         }
     }
+    /* Receive filePath from doInBackgroung and launch the video player */
 
+    public void launchVideoPlayerByPath(String filepath) {
+        Intent myIntent = new Intent(mContext, VideoViewActivity.class);
+        myIntent.putExtra("pathVideo", filepath);
+        mContext.startActivity(myIntent);
+    }
+
+
+    private String getFileExtension(String path) {
+        String name = path;
+        int lastIndexOf = name.lastIndexOf(".");
+        if (lastIndexOf == -1) {
+            return ""; // empty extension
+        }
+        return name.substring(lastIndexOf);
+    }
 }

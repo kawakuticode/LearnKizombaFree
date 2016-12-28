@@ -18,7 +18,7 @@
     <View
         android:id="@+id/divider_mating"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="2dp"
         android:background="@drawable/divider_style"
         android:padding="2dp" />
 

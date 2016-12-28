@@ -21,258 +21,186 @@ import java.io.File;
 
 /**
  * @author Russelius Ernestius
- * 
  */
 
 public class IntermediaLevel extends ListFragment {
 
-	private String intermediats[];
-	private Integer[] imageId;
-	private ProgressDialog progressDialog;
-	private String[] contents = new String[2];
-	private Integer[] imageButton;
+    private String intermediats[];
+    private Integer[] imageId;
+    private ProgressDialog progressDialog;
+    private String[] contents = new String[3];
+    private Integer[] imageButton;
+    private Utilities utilities;
 
-	public IntermediaLevel() {
+    public IntermediaLevel() {
 
-		intermediats = new String[] { "giro basico", "saida homem",
-				"saida mulher",  };
+        intermediats = new String[]{"giro basico", "saida homem",
+                "saida mulher",};
 
-		imageId = new Integer[] { R.drawable.icones1, R.drawable.icones2,
-				R.drawable.icones3};
-		imageButton = new Integer[] { R.drawable.arrow, R.drawable.arrow,
-				R.drawable.arrow};
-	}
+        imageId = new Integer[]{R.drawable.icones1, R.drawable.icones2,
+                R.drawable.icones3};
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    }
 
-		ListAdapter listAdapter = new CustomList(getActivity(), intermediats,
-				imageId, imageButton);
-		setListAdapter(listAdapter);
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ListAdapter listAdapter = new CustomList(getActivity(), intermediats,
+                imageId, imageButton);
+        setListAdapter(listAdapter);
+    }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-
-
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         return inflater.inflate(R.layout.list_fragment, container, false);
-	}
+    }
 
-	@Override
-	public void onListItemClick(ListView list, View v, int position, long id) {
+    @Override
+    public void onListItemClick(ListView list, View v, int position, long id) {
 
-		String item = (String) list.getAdapter().getItem(position);
+        String item = (String) list.getAdapter().getItem(position);
 
-		String url = "";
-		String folder = "/semba/";
-		File toPlay;
+        String url = "";
+        File toPlay;
+        int temp_file_size;
+        String folder = "/semba/";
+        utilities = new Utilities(getActivity());
 
-		if (isExternalStorageAvailable() == true) {
-			String imagePath = Environment.getExternalStorageDirectory()
-					.toString() + folder;
+        if (  utilities.isExternalStorageAvailable() == true) {
+            String imagePath = Environment.getExternalStorageDirectory()
+                    .toString() + folder;
 
-			switch (item) {
+            switch (item) {
 
-			case "giro basico":
+                case "giro basico":
 
-				toPlay = new File(imagePath, item);
+                    toPlay = new File(imagePath, item);
+                    temp_file_size = new Integer(13475060);
 
-				int sizegb = 22634150;
+                    if (toPlay.exists() && toPlay.length() == temp_file_size) {
 
-				if (toPlay.exists() && toPlay.length() == sizegb) {
+                        utilities.launchVideoPlayer(toPlay);
 
-					launchVideoPlayer(toPlay);
+                    } else if ((toPlay.exists() || toPlay.length() < temp_file_size)
+                            &&   utilities.isOnline() == false) {
 
-				} else if ((toPlay.exists() || toPlay.length() < sizegb)
-						&& isOnline() == false) {
+                        utilities.showAlertDialog(getActivity(), "No Internet Connection",
+                                "Turn On your Connection to Download the file.",
+                                false);
+                        break;
 
-					showAlertDialog(getActivity(), "No Internet Connection",
-							"Turn On your Connection to Download the file.",
-							false);
-					break;
+                    } else if ((toPlay.exists() || toPlay.length() < temp_file_size)
+                            &&   utilities.isOnline() == true) {
 
-				} else if ((toPlay.exists() || toPlay.length() < sizegb)
-						&& isOnline() == true) {
+                        if (  utilities.checkSpaceOnCard(temp_file_size) == true) {
+                            utilities.showAlertDialog(
+                                    getActivity(),
+                                    "No Enough Space ",
+                                    "Delete some file on your sdCard and try again.",
+                                    false);
+                            break;
+                        } else {
 
-					if (checkSpaceOnCard(sizegb) == true) {
-						showAlertDialog(
-								getActivity(),
-								"No Enough Space ",
-								"Delete some file on your sdCard and try again.",
-								false);
-						break;
-					} else {
+                            url = "https://drive.google.com/uc?export=download&id=0B2w_WoypwqQGbjlXU2RGcElLdVk";
 
-						url = "https://dl.dropboxusercontent.com/s/d0ltioff7w4r87r/giro%20basico.mp4?dl=1&token_hash=AAG-uoTDb9NunI6eZoblMGqaatgTIijAi96gtu1-rn7vrQ";
-						contents[0] = url;
-						contents[1] = toPlay.getName();
+                            contents[0] = url;
+                            contents[1] = toPlay.getName();
+                            contents[2] = String.valueOf(temp_file_size);
 
-						new DownloadAsyncFile(getActivity(), progressDialog)
-								.execute(contents);
+                            new DownloadAsyncFile(getActivity(), progressDialog)
+                                    .execute(contents);
 
-					}
-				}
-				break;
+                        }
+                    }
+                    break;
 
-			case "saida homem":
+                case "saida homem":
 
-				toPlay = new File(imagePath, item);
+                    toPlay = new File(imagePath, item);
 
-				int sizesh = 14701029;
+                    temp_file_size = new Integer(24040991);
 
-				if (toPlay.exists() && toPlay.length() == sizesh) {
+                    if (toPlay.exists() && toPlay.length() == temp_file_size) {
 
-					launchVideoPlayer(toPlay);
+                        utilities.launchVideoPlayer(toPlay);
 
-				} else if ((toPlay.exists() || toPlay.length() < sizesh)
-						&& isOnline() == false) {
+                    } else if ((toPlay.exists() || toPlay.length() < temp_file_size)
+                            &&   utilities.isOnline() == false) {
 
-					showAlertDialog(getActivity(), "No Internet Connection",
-							"Turn On your Connection to Download the file.",
-							false);
-					break;
+                        utilities.showAlertDialog(getActivity(), "No Internet Connection",
+                                "Turn On your Connection to Download the file.",
+                                false);
+                        break;
 
-				} else if ((toPlay.exists() || toPlay.length() < sizesh)
-						&& isOnline() == true) {
+                    } else if ((toPlay.exists() || toPlay.length() < temp_file_size)
+                            &&   utilities.isOnline() == true) {
 
-					if (checkSpaceOnCard(sizesh) == true) {
-						showAlertDialog(
-								getActivity(),
-								"No Enough Space ",
-								"Delete some file on your sdCard and try again.",
-								false);
-						break;
-					} else {
+                        if (  utilities.checkSpaceOnCard(temp_file_size) == true) {
+                            utilities.showAlertDialog(
+                                    getActivity(),
+                                    "No Enough Space ",
+                                    "Delete some file on your sdCard and try again.",
+                                    false);
+                            break;
+                        } else {
 
-						url = "https://dl.dropboxusercontent.com/s/qi96qht83iuv1o7/saida%20homem.mp4?dl=1&token_hash=AAE7oo8PFJ4keOKgcUUmHqMq1MRN1d5JITIqZYk43nMJlQ";
-						contents[0] = url;
-						contents[1] = toPlay.getName();
+                            url = "https://drive.google.com/uc?export=download&id=0B2w_WoypwqQGLVUyblYwQjlxLUk";
+                            contents[0] = url;
+                            contents[1] = toPlay.getName();
+                            contents[2] = String.valueOf(temp_file_size);
 
-						new DownloadAsyncFile(getActivity(), progressDialog)
-								.execute(contents);
+                            new DownloadAsyncFile(getActivity(), progressDialog)
+                                    .execute(contents);
 
-					}
-				}
-				break;
-			case "saida mulher":
+                        }
+                    }
+                    break;
+                case "saida mulher":
 
-				toPlay = new File(imagePath, item);
-				int sizesm = 21300811;
-				if (toPlay.exists() && toPlay.length() == sizesm) {
+                    toPlay = new File(imagePath, item);
+                    temp_file_size = new Integer(12852824);
+                    if (toPlay.exists() && toPlay.length() == temp_file_size) {
 
-					launchVideoPlayer(toPlay);
+                        utilities.launchVideoPlayer(toPlay);
 
-				} else if ((toPlay.exists() || toPlay.length() < sizesm)
-						&& isOnline() == false) {
+                    } else if ((toPlay.exists() || toPlay.length() < temp_file_size)
+                            &&   utilities.isOnline() == false) {
 
-					showAlertDialog(getActivity(), "No Internet Connection",
-							"Turn On your Connection to Download the file.",
-							false);
-					break;
+                        utilities.showAlertDialog(getActivity(), "No Internet Connection",
+                                "Turn On your Connection to Download the file.",
+                                false);
+                        break;
 
-				} else if ((toPlay.exists() || toPlay.length() < sizesm)
-						&& isOnline() == true) {
+                    } else if ((toPlay.exists() || toPlay.length() < temp_file_size)
+                            &&   utilities.isOnline() == true) {
 
-					if (checkSpaceOnCard(sizesm) == true) {
-						showAlertDialog(
-								getActivity(),
-								"No Enough Space ",
-								"Delete some file on your sdCard and try again.",
-								false);
-						break;
-					} else {
+                        if (  utilities.checkSpaceOnCard(temp_file_size) == true) {
+                            utilities.showAlertDialog(
+                                    getActivity(),
+                                    "No Enough Space ",
+                                    "Delete some file on your sdCard and try again.",
+                                    false);
+                            break;
+                        } else {
 
-						url = "https://dl.dropboxusercontent.com/s/xe9uuewbbli4j9b/saida%20mulher.mp4?dl=1&token_hash=AAENUSft-LsyipNkN0ikCGoVDcwMQJhrY6qnZRJBPlTuqA";
-						contents[0] = url;
-						contents[1] = toPlay.getName();
+                            url = "https://drive.google.com/uc?export=download&id=0B2w_WoypwqQGdDVYVURWR2FLN0U";
+                            contents[0] = url;
+                            contents[1] = toPlay.getName();
+                            contents[2] = String.valueOf(temp_file_size);
 
-						new DownloadAsyncFile(getActivity(), progressDialog)
-								.execute(contents);
-					}
-				}
-				break;
-			default:
-				break;
-			}
-		}
+                            new DownloadAsyncFile(getActivity(), progressDialog)
+                                    .execute(contents);
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            utilities.showAlertDialog(getActivity(), "External Card Not Available",
+                    "Insert Your SDCard to Read/Write Files", false);
+        }
 
-		else {
-			showAlertDialog(getActivity(), "External Card Not Available",
-					"Insert Your SDCard to Read/Write Files", false);
-		}
-
-	}
-
-	public void launchVideoPlayer(File videoFile) {
-
-		Intent myIntent = new Intent(getActivity(), VideoViewActivity.class);
-
-		myIntent.putExtra("pathVideo", videoFile.getAbsolutePath());
-		getActivity().startActivity(myIntent);
-
-	}
-
-	public boolean isOnline() {
-		ConnectivityManager cm = (ConnectivityManager) getActivity()
-				.getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo netInfo = cm.getActiveNetworkInfo();
-		if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Function to display simple Alert Dialog
-	 * 
-	 * @param context
-	 *            - application context
-	 * @param title
-	 *            - alert dialog title
-	 * @param message
-	 *            - alert message
-	 * @param status
-	 *            - success/failure (used to set icon)
-	 * */
-	@SuppressWarnings("deprecation")
-	public void showAlertDialog(Context context, String title, String message,
-			Boolean status) {
-		AlertDialog alertDialog = new AlertDialog.Builder(context).create();
-
-		// Setting Dialog Title
-		alertDialog.setTitle(title);
-
-		// Setting Dialog Message
-		alertDialog.setMessage(message);
-
-		// Setting alert dialog icon
-		alertDialog.setIcon((status) ? R.drawable.success : R.drawable.fail);
-
-		// Setting OK Button
-		alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-			}
-		});
-
-		// Showing Alert Message
-		alertDialog.show();
-	}
-
-	@SuppressLint("NewApi")
-	public boolean checkSpaceOnCard(int sizeOfFile)
-
-	{
-		return Environment.getExternalStorageDirectory().getTotalSpace() < sizeOfFile ? true
-				: false;
-	}
-
-	public boolean isExternalStorageAvailable() {
-		String state = Environment.getExternalStorageState();
-
-		return Environment.MEDIA_MOUNTED.equals(state) ? true : false;
-	}
-
+    }
 }

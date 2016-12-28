@@ -2,7 +2,6 @@ package kawakuticode.kawakutilearnsembafree;
 
 /**
  * @author Russelius Ernestius
- *
  */
 
 import android.annotation.SuppressLint;
@@ -26,160 +25,139 @@ import java.net.URLConnection;
 @SuppressLint("NewApi")
 public class DownloadAsyncFile extends AsyncTask<String, Integer, String> {
 
-	private static final String APP_TAG = "l_semba";
-	private Context mContext;
-	ProgressDialog mProgress;
-	SurfaceHolder holder;
+    private static final String APP_TAG = "l_semba";
+    private Context mContext;
+    ProgressDialog mProgress;
+    Utilities utilities;
+    SurfaceHolder holder;
 
-	public DownloadAsyncFile(Context context, ProgressDialog progressDialog) {
-		this.mContext = context;
-		this.mProgress = progressDialog;
+    public DownloadAsyncFile(Context context, ProgressDialog progressDialog) {
+        this.mContext = context;
+        this.mProgress = progressDialog;
+        utilities = new Utilities(context);
 
-	}
+    }
 
-	@Override
-	public void onPreExecute() {
-		mProgress = new ProgressDialog(mContext);
-		mProgress.setMessage("Downloading the video Lesson \nPlease wait...");
-		mProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-		mProgress.setIndeterminate(false);
-		mProgress.setMax(100);
-		mProgress.setCancelable(false);
-		mProgress.show();
-	}
+    @Override
+    public void onPreExecute() {
+        mProgress = new ProgressDialog(mContext);
+        mProgress.setMessage("Downloading the video Lesson \nPlease wait...");
+        mProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        mProgress.setIndeterminate(false);
+        mProgress.setMax(100);
+        mProgress.setCancelable(false);
+        mProgress.show();
+    }
 
-	@Override
-	protected void onProgressUpdate(Integer... values) {
+    @Override
+    protected void onProgressUpdate(Integer... values) {
 
-		mProgress.setProgress(values[0]);
+        mProgress.setProgress(values[0]);
 
-	}
+    }
 
-	@Override
-	protected String doInBackground(String... f_url) {
+    @Override
+    protected String doInBackground(String... f_url) {
 
-		int count;
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-				.permitAll().build();
-		StrictMode.setThreadPolicy(policy);
+        int count;
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                .permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
-		File videoFile = null;
-		FileOutputStream fileOutput;
-		File sdDir = Environment.getExternalStorageDirectory();
-		String folder = "/semba";
+        File videoFile = null;
+        FileOutputStream fileOutput;
+        File sdDir = Environment.getExternalStorageDirectory();
+        String folder = "/semba";
 
-		if (sdDir.exists() && sdDir.canWrite()) {
+        if (sdDir.exists() && sdDir.canWrite()) {
 
-			File testDir = new File(sdDir + folder);
-			testDir.mkdir();
+            File testDir = new File(sdDir + folder);
+            testDir.mkdir();
 
-			if (testDir.exists() && testDir.canWrite()) {
+            if (testDir.exists() && testDir.canWrite()) {
 
-				videoFile = new File(testDir + "/" + f_url[1]);
+                videoFile = new File(testDir + "/" + f_url[1]);
 
-				try {
+                try {
 
-					videoFile.createNewFile();
+                    videoFile.createNewFile();
 
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
 
-				if (videoFile.exists() && videoFile.canWrite()) {
+                if (videoFile.exists() && videoFile.canWrite()) {
 
-					try {
+                    try {
 
-						URL url = new URL(f_url[0]);
-						URLConnection conection = url.openConnection();
-						conection.connect();
+                        URL url = new URL(f_url[0]);
+                        URLConnection conection = url.openConnection();
+                        conection.connect();
 
-						// getting file length
-						int lenghtOfFile = Integer.parseInt(f_url[2]);
-						// input stream to read file - with 8k buffer
-						InputStream input = new BufferedInputStream(
-								url.openStream(), 8192);
+                        // getting file length
+                        int lenghtOfFile = Integer.parseInt(f_url[2]);
+                        // input stream to read file - with 8k buffer
+                        InputStream input = new BufferedInputStream(
+                                url.openStream(), 8192);
 
-						// Output stream to write file
-						fileOutput = new FileOutputStream(videoFile);
+                        // Output stream to write file
+                        fileOutput = new FileOutputStream(videoFile);
 
-						byte data[] = new byte[1024];
+                        byte data[] = new byte[1024];
 
-						long total = 0;
+                        long total = 0;
 
-						while ((count = input.read(data)) != -1) {
-							if (isCancelled()) {
+                        while ((count = input.read(data)) != -1) {
+                            if (isCancelled()) {
 
-								break;
-							}
+                                break;
+                            }
 
-							total += count;
-							// publishing the progress....
-							// After this onProgressUpdate will be called
-							publishProgress((int) ((total * 100) / lenghtOfFile));
+                            total += count;
+                            // publishing the progress....
+                            // After this onProgressUpdate will be called
+                            publishProgress((int) ((total * 100) / lenghtOfFile));
 
-							// writing data to file
-							fileOutput.write(data, 0, count);
+                            // writing data to file
+                            fileOutput.write(data, 0, count);
 
-						}
+                        }
 
-						// flushing output
-						fileOutput.flush();
+                        // flushing output
+                        fileOutput.flush();
 
-						// closing streams
-						fileOutput.close();
-						input.close();
+                        // closing streams
+                        fileOutput.close();
+                        input.close();
 
-					} catch (Exception e) {
+                    } catch (Exception e) {
 
-						Log.e(APP_TAG, e.getMessage());
+                        Log.e(APP_TAG, e.getMessage());
 
-					}
+                    }
 
-				} else {
+                } else {
 
-					Log.e(APP_TAG, "error writing to file");
-				}
+                    Log.e(APP_TAG, "error writing to file");
+                }
 
-			} else {
-				Log.e(APP_TAG, "ERROR, unable to write to /sdcard/test_folder");
-			}
-			// } else {
-			Log.e(APP_TAG, "ERROR, /sdcard path not available");
-		}
+            } else {
+                Log.e(APP_TAG, "ERROR, unable to write to /sdcard/test_folder");
+            }
+            // } else {
+            Log.e(APP_TAG, "ERROR, /sdcard path not available");
+        }
 
-		return videoFile.getAbsolutePath();
+        return videoFile.getAbsolutePath();
 
-	}
+    }
 
-	@Override
-	protected void onPostExecute(String f_url) {
+    @Override
+    protected void onPostExecute(String f_url) {
+        mProgress.dismiss();
+        utilities.launchVideoPlayerByPath(f_url);
+    }
 
-		mProgress.dismiss();
-
-			launchVideoPlayer(f_url);
-
-	}
-
-	/* Receive filePath from doInBackgroung and launch the video player */
-
-	public void launchVideoPlayer(String filepath) {
-
-		Intent myIntent = new Intent(mContext, VideoViewActivity.class);
-
-		myIntent.putExtra("pathVideo", filepath);
-		mContext.startActivity(myIntent);
-
-	}
-
-
-	private String getFileExtension(String path) {
-		String name = path;
-		int lastIndexOf = name.lastIndexOf(".");
-		if (lastIndexOf == -1) {
-			return ""; // empty extension
-		}
-		return name.substring(lastIndexOf);
-	}
 
 }
