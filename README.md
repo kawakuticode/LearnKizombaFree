@@ -9,7 +9,7 @@ For the first time you can learn from one of the best instructors without leavin
 
 #PREVIEWS
 ![preview](https://github.com/kawakuticode/LearnKizombaFree/blob/master/previews/L1.png)
-![preview](https://github.com/kawakuticode/LearnKizombaFree/blob/master/previews/L2.png)
+![preview](https://github.com/kawakuticode/LearnKizombaFree/blob/master/previews/l2.png)
 ![preview](https://github.com/kawakuticode/LearnKizombaFree/blob/master/previews/L3.png)
 ![preview](https://github.com/kawakuticode/LearnKizombaFree/blob/master/previews/L4.png)
 ![preview](https://github.com/kawakuticode/LearnKizombaFree/blob/master/previews/L5.png)
